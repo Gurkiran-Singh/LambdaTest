@@ -1,0 +1,118 @@
+service: wexlambda
+
+
+
+frameworkVersion: '2'
+
+custom: 
+
+  currentStage:  ${opt:stage, 'development'}
+  currentRegion: ${opt:region, 'us-east-1'}
+  currentBucket: ${self:provider.stage}-fittoo-2041-wex
+  
+  
+  
+  serverlessIfElse:
+
+      - If: '"${self:custom.currentStage}" == "development"'
+        Set: 
+          provider.deploymentBucket: ${self:custom.currentBucket}
+          provider.stackName: ${self:provider.stackName}
+          provider.region:  ${self:custom.currentRegion}
+        
+
+     
+
+
+      - If: '"${self:custom.currentStage}" == "production"'
+
+        Set: 
+          provider.deploymentBucket: ${self:custom.currentBucket}
+          provider.stackName: ${self:provider.stackName}
+          provider.region: ${self:custom.currentRegion}
+
+
+
+      - If: '"${self:custom.currentStage}" == "staging"'
+        Set: 
+          provider.deploymentBucket: ${self:custom.currentBucket}
+          provider.stackName: ${self:provider.stackName}
+          provider.region:  ${self:custom.currentRegion}
+
+
+
+  customBuckets: 
+    - name: ${self:provider.stage}-fittoo-2041-wex
+      config: 
+         versioning: true
+         serverSideEncryption: AES256
+         publicAccess:
+           PublicAccessBlockConfiguration:
+            BlockPublicAcls: true
+            BlockPublicPolicy: true
+            IgnorePublicAcls: true
+            RestrictPublicBuckets: true 
+  
+
+
+
+  
+
+provider:
+  name: aws
+  runtime: python3.8
+  role: TestIAMRole
+  stage: ${self:custom.currentStage}  
+  region: ${self:custom.currentRegion}
+  #stage: dev
+  #region: us-west-1
+  stackName: ${self:custom.currentStage}-wexStack
+  deploymentBucket: 
+      name: ${self:custom.currentBucket}
+      
+      
+  
+
+
+functions:
+  hello:
+    handler: handler.hello
+
+plugins: 
+  - serverless-deployment-bucket
+  - serverless-custom-buckets
+  - serverless-plugin-ifelse
+ 
+
+  #- serverless-plugin-create-deployment-bucket
+
+resources:
+ Resources: 
+  TestIAMRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      RoleName: TestRole1-${self:provider.stage}-${self:service}-iamrole
+      AssumeRolePolicyDocument: 
+        Version: '2012-10-17'
+        Statement: 
+          - Effect: Allow
+            Principal:
+              Service: 
+                - "lambda.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns: 
+      #  - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       # - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+        - "arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess"
+      #  - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+
+  #lambdabucket251994:
+  #  Type: AWS::S3::Bucket
+  #  Properties:
+   #   BucketName: wexbucket123321
+      #serverSideEncryption: AES256
+      #blockPublicAccess: true
+
+      
