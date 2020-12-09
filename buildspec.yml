@@ -12,7 +12,7 @@ phases:
 
   pre_build: 
     commands: 
-       - install npm 
+       - npm install 
 
   build: 
     commands: 
