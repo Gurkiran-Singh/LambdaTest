@@ -19,6 +19,6 @@ phases:
 
       - mkdir -p target/stg
 
-  artifacts: 
-    files:
+artifacts: 
+   files:
       - target/**/*
