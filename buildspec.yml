@@ -10,13 +10,13 @@ phases:
 
   pre-build: 
     commands: 
-    - install npm 
+       - install npm 
 
   build: 
     commands: 
 
-    - mkdir -p target/stg
+      - mkdir -p target/stg
 
   artifacts: 
-      files:
-        - target/**/*
+    files:
+      - target/**/*
