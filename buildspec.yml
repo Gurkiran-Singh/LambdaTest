@@ -5,12 +5,12 @@ phases:
      
     runtime-versions:
       python: 3.8
-      
+
     commands:    
         - pip install boto3    
         - npm install -g serverless
 
-  pre-build: 
+  pre_build: 
     commands: 
        - install npm 
 
