@@ -1,0 +1,22 @@
+version: 0.2
+
+phases: 
+  install: 
+    commands: 
+      - runtime-versions:
+          python: 3.8
+      - pip install boto3    
+      - npm install -g serverless
+
+  pre-build: 
+    commands: 
+    - install npm 
+
+  build: 
+    commands: 
+
+    - mkdir -p target/stg
+
+  artifacts: 
+      files:
+        - target/**/*
