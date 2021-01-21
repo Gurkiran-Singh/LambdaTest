@@ -4,16 +4,6 @@ pipeline{
     
     stages{
         
-        stage('Checkout Resource'){
-            
-            
-            steps{
-                
-                git url: 'https://github.com/Gurkiran-Singh/LambdaTest.git'
-            }
-            
-            
-        }
         
         stage('Deploy'){
             
